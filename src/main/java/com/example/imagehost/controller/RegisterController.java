@@ -4,6 +4,7 @@ package com.example.imagehost.controller;
 import com.example.imagehost.model.User;
 import com.example.imagehost.repository.UserRepository;
 import com.example.imagehost.util.IdentifyCodeMap;
+import com.example.imagehost.util.PasswordEncryptor;
 import com.example.imagehost.util.response.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class RegisterController {
         }
         if (IdentifyCodeMap.identifyCodeMap.get(mailbox)==identify_code){
             // 验证码正确
-            userRepository.save(new User(mailbox,password));
+            userRepository.save(new User(mailbox, PasswordEncryptor.generatorPasswordHash(password)));
             return new BaseResponse(1,"Succeed");
         }else{
             return new BaseResponse(0,"WrongIdentifyCode");

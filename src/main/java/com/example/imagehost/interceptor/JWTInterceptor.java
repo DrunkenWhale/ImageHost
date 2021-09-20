@@ -20,16 +20,6 @@ public class JWTInterceptor implements HandlerInterceptor {
         if (request.getMethod().equals("OPTIONS")){
             response.setStatus(HttpServletResponse.SC_OK); // 200
         }
-
-        String login = request.getRequestURI();
-//        if (login.contains("/api/auth/register")||
-//                login.contains("/api/auth/identify")||
-//                login.contains("/api/auth/login")||
-//                login.contains("/api/file/download")
-//        ){
-//            return true;   // 不需要拦截登陆请求
-//        }
-
         String bearerToken = request.getHeader("Authorization");
 
         if (bearerToken == null || !bearerToken.contains("Bearer ")){   // BearerToken

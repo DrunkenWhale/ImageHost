@@ -9,6 +9,7 @@ target/
 *.png
 *.webp
 *.gif
+*.bmp
 ### STS ###
 .apt_generated
 .classpath

@@ -3,6 +3,7 @@ package com.example.imagehost.controller;
 import com.example.imagehost.model.User;
 import com.example.imagehost.repository.UserRepository;
 import com.example.imagehost.util.JwtUtils;
+import com.example.imagehost.util.PasswordEncryptor;
 import com.example.imagehost.util.response.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +29,11 @@ public class UpdateController {
             if(optionalUser.isPresent()){
                 // 用户存在
                 User user = optionalUser.get();
-                if (Objects.equals(user.getPassword(), password)){
+                if (PasswordEncryptor.checkPasswordHash(password, user.getPassword())){
                     // 用户密码正确
                     // 对应字段存在就更新
                     if (newPassword!=null){
-                        user.setPassword(newPassword);
+                        user.setPassword(PasswordEncryptor.generatorPasswordHash(newPassword));
                     }
                     userRepository.saveAndFlush(user);
                     return new BaseResponse(0,"Succeed");

@@ -4,6 +4,7 @@ package com.example.imagehost.controller;
 import com.example.imagehost.model.User;
 import com.example.imagehost.repository.UserRepository;
 import com.example.imagehost.util.JwtUtils;
+import com.example.imagehost.util.PasswordEncryptor;
 import com.example.imagehost.util.response.TokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class LoginController {
             if(optionalUser.isPresent()){
                 // 用户存在
                 User user = optionalUser.get();
-                if (Objects.equals(user.getPassword(), password)){ // 使用equal可以安全判空
+                if (PasswordEncryptor.checkPasswordHash(password,user.getPassword())){ // 使用equal可以安全判空
                     // 密码正确
                     return new TokenResponse(1,"Succeed", JwtUtils.generateJwt(mailbox));
                 }else{

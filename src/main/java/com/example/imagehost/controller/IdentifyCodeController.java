@@ -31,7 +31,7 @@ public class IdentifyCodeController {
         try{
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             // 发件人
-            simpleMailMessage.setFrom("ReciteWord@163.com");
+            simpleMailMessage.setFrom("OddImageHost@163.com");
             // 收件人
             simpleMailMessage.setTo(mailbox);
             // 邮件标题
@@ -39,7 +39,8 @@ public class IdentifyCodeController {
             // 生成验证码
             Integer identifyCode = (Integer)(int) (Math.random() * 9999999);
             // 邮件内容
-            simpleMailMessage.setText("您的验证码是" + identifyCode + "(我想不出好文案了)");
+            simpleMailMessage.setText("亲爱的"+mailbox+":您正在注册一个奇妙的图床账号，这里有一串神奇的代码，可以保证您之后畅通无阻，请记住他哦~:"
+                    + identifyCode + "。请于七分钟内使用这串神奇代码进行来获取您的专属通行权限~~ヾ(✿ﾟ▽ﾟ)ノ" );
             javaMailSender.send(simpleMailMessage);
             IdentifyCodeMap.identifyCodeMap.put(mailbox,identifyCode);
             IdentifyCodeMap.identifyTimeMap.put(mailbox,new Date().getTime());
