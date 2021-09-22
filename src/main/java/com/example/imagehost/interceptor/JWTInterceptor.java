@@ -11,12 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 public class JWTInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        //HTTP 请求头获取源IP或域名　并配置到跨域源中
-        response.addHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-        response.addHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT,HEAD");
-        response.addHeader("Access-Control-Max-Age", "3600000");
-        response.addHeader("Access-Control-Allow-Credentials", "true");
-        response.addHeader("Access-Control-Allow-Headers", "Authentication,Origin, X-Requested-With, Content-Type, Accept,token");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "*");
         if (request.getMethod().equals("OPTIONS")){
             response.setStatus(HttpServletResponse.SC_OK); // 200
         }
@@ -25,8 +23,10 @@ public class JWTInterceptor implements HandlerInterceptor {
         if (bearerToken == null || !bearerToken.contains("Bearer ")){   // BearerToken
             return false;
         }
-
         String mailbox = JwtUtils.decodeJwt(bearerToken.split(" ")[1]);
+        if (mailbox==null){
+            return false;
+        }
         request.setAttribute("mailbox",mailbox);
         return true;
     }

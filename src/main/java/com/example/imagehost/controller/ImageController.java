@@ -25,6 +25,7 @@ import java.util.HashMap;
 
 @RequestMapping("/image")
 @RestController
+@CrossOrigin
 public class ImageController {
 
     final UserRepository userRepository;
@@ -60,7 +61,7 @@ public class ImageController {
             // 是图片文件 (后缀合理)
             long imageSize = image.getSize();
             String path = System.getProperty("user.dir") + File.separatorChar + "image";
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA256");  // 这里是用了单例吧?
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");  // 这里是用了单例吧?
             messageDigest.update((imageName+mailbox).getBytes(StandardCharsets.UTF_8)); // 把文件名和邮箱拼一起哈希算了 真是麻烦
             String encodeImageName = EncodeHex.encode(messageDigest.digest());
             String imageSavePath = path + File.separatorChar + encodeImageName + '.' + imagePostfix;
@@ -74,14 +75,16 @@ public class ImageController {
                     imageHost.setCounts(imageHost.getCounts() + 1);  // 更新持有的数量
                     userRepository.save(imageHost);
                     imageRepository.save(new Image(imageName, imageSavePath, imageSize, imageHost));
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("ImageUrl", ImageHostUrl.prefixUrl+"/image/download/" + encodeImageName + '.' + imagePostfix);
-                    return new DataResponse<>(1, "Succeed", map);
+                    HashMap<String, String> data = new HashMap<>();
+                    data.put("ImageUrl", ImageHostUrl.prefixUrl+"/image/download/" + encodeImageName + '.' + imagePostfix);
+                    return new DataResponse<>(1, "Succeed", data);
                 } else {
                     return new DataResponse<>(0, "UserUnExist", null);
                 }
             }else{
-                return new DataResponse<>(0,"ImageExist",null);
+                HashMap<String, String> data = new HashMap<>();
+                data.put("ImageUrl", ImageHostUrl.prefixUrl+"/image/download/" + encodeImageName + '.' + imagePostfix);
+                return new DataResponse<>(1,"ImageExist",data);
             }
 
         } else {

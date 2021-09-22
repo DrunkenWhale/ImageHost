@@ -22,9 +22,15 @@ public class JwtUtils {
     }
 
     public static String decodeJwt(String token){
-        DecodedJWT jwt = JWT.decode(token);
-        return jwt.getAudience().get(0);
-        // getAudience方法返回List<String>
+        try{
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getAudience().get(0);
+            // getAudience方法返回List<String>
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
 }

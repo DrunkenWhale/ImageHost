@@ -14,8 +14,8 @@ public class PasswordEncryptor {
     @SneakyThrows
     public static String generatorPasswordHash(String password){
         String salt = getRandomSalt();
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA256");
-        for (int i=1;i<=10 ;++i){
+        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+        for (int i=1;i<=17 ;++i){
             messageDigest.update((salt+password).getBytes(StandardCharsets.UTF_8));
             password = EncodeHex.encode(messageDigest.digest());
         }
@@ -24,8 +24,8 @@ public class PasswordEncryptor {
 
     @SneakyThrows
     public static String generatorPasswordHash(String password,String salt){
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA256");
-        for (int i=1;i<=10 ;++i){
+        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+        for (int i=1;i<=17 ;++i){
             messageDigest.update((salt+password).getBytes(StandardCharsets.UTF_8));
             password = EncodeHex.encode(messageDigest.digest());
         }
